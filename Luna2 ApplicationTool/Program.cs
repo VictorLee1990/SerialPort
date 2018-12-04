@@ -17,6 +17,7 @@ namespace Luna2_ApplicationTool
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
-        }
+        
+        }  
     }
 }

@@ -111,6 +111,12 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ResizeFormLibrary\ResizeFormLibrary.csproj">
+      <Project>{16980D33-1D56-4829-9857-0791DCDE4AC2}</Project>
+      <Name>ResizeFormLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
