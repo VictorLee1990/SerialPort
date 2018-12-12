@@ -436,6 +436,17 @@ namespace Luna2_ApplicationTool
             toolStripStatusTx.Text = "Sent: " + sendBytesCount.ToString();
         }
 
+
+        /// <summary>
+        /// update time in status bar
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void statustimer_Tick(object sender, EventArgs e)
+        {
+            this.statusTimeLabel.Text = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
+        }
+
         /// <summary>
         /// open or close serial port
         /// </summary>
@@ -627,5 +638,19 @@ namespace Luna2_ApplicationTool
 
         //        }
         #endregion
+
+        /// <summary>
+        /// clear receive text in receive area
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void clearReceivebtn_Click(object sender, EventArgs e)
+        {
+            receivetbx.Text = "";
+            toolStripStatusRx.Text = "Received: 0";
+            receiveBytesCount = 0;
+        }
+
+     
     }
 }

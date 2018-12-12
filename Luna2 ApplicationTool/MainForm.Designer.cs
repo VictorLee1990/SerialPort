@@ -81,6 +81,8 @@
             this.textBox_humi = new System.Windows.Forms.TextBox();
             this.textBox_Temp = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label_Humi = new System.Windows.Forms.Label();
+            this.label_Temp = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -381,6 +383,12 @@
             this.menuStrip1.TabIndex = 27;
             this.menuStrip1.Text = "menuStrip1";
             // 
+            // statustimer
+            // 
+            this.statustimer.Enabled = true;
+            this.statustimer.Interval = 1000;
+            this.statustimer.Tick += new System.EventHandler(this.statustimer_Tick);
+            // 
             // autoSendtimer
             // 
             this.autoSendtimer.Interval = 1000;
@@ -420,7 +428,7 @@
             this.tableLayoutPanel3.ColumnCount = 3;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 41.2844F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 58.7156F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 152F));
             this.tableLayoutPanel3.Controls.Add(this.label2, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.sendHexRadiobtn, 2, 0);
             this.tableLayoutPanel3.Controls.Add(this.sendStrRadiobtn, 1, 0);
@@ -445,7 +453,7 @@
             // sendHexRadiobtn
             // 
             this.sendHexRadiobtn.AutoSize = true;
-            this.sendHexRadiobtn.Location = new System.Drawing.Point(111, 3);
+            this.sendHexRadiobtn.Location = new System.Drawing.Point(109, 3);
             this.sendHexRadiobtn.Name = "sendHexRadiobtn";
             this.sendHexRadiobtn.Size = new System.Drawing.Size(47, 19);
             this.sendHexRadiobtn.TabIndex = 17;
@@ -460,7 +468,7 @@
             this.sendStrRadiobtn.Checked = true;
             this.sendStrRadiobtn.Location = new System.Drawing.Point(47, 3);
             this.sendStrRadiobtn.Name = "sendStrRadiobtn";
-            this.sendStrRadiobtn.Size = new System.Drawing.Size(58, 19);
+            this.sendStrRadiobtn.Size = new System.Drawing.Size(56, 19);
             this.sendStrRadiobtn.TabIndex = 16;
             this.sendStrRadiobtn.TabStop = true;
             this.sendStrRadiobtn.Text = "String";
@@ -526,7 +534,7 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 26.39405F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 73.60595F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 57F));
             this.tableLayoutPanel1.Controls.Add(this.clearReceivebtn, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.panel1, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
@@ -548,13 +556,14 @@
             this.clearReceivebtn.TabIndex = 11;
             this.clearReceivebtn.Text = "Clear";
             this.clearReceivebtn.UseVisualStyleBackColor = true;
+            this.clearReceivebtn.Click += new System.EventHandler(this.clearReceivebtn_Click);
             // 
             // panel1
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.recHexRadiobtn);
             this.panel1.Controls.Add(this.recStrRadiobtn);
-            this.panel1.Location = new System.Drawing.Point(361, 3);
+            this.panel1.Location = new System.Drawing.Point(359, 3);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(119, 22);
             this.panel1.TabIndex = 20;
@@ -597,7 +606,7 @@
             this.treeView_device.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView_device.Location = new System.Drawing.Point(0, 0);
             this.treeView_device.Name = "treeView_device";
-            this.treeView_device.Size = new System.Drawing.Size(197, 156);
+            this.treeView_device.Size = new System.Drawing.Size(203, 156);
             this.treeView_device.TabIndex = 29;
             this.treeView_device.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_device_AfterSelect);
             // 
@@ -612,7 +621,7 @@
             this.textBox_device.Name = "textBox_device";
             this.textBox_device.ReadOnly = true;
             this.textBox_device.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox_device.Size = new System.Drawing.Size(348, 156);
+            this.textBox_device.Size = new System.Drawing.Size(342, 156);
             this.textBox_device.TabIndex = 30;
             this.textBox_device.TabStop = false;
             // 
@@ -650,6 +659,8 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.label_Humi);
+            this.groupBox3.Controls.Add(this.label_Temp);
             this.groupBox3.Controls.Add(this.label13);
             this.groupBox3.Controls.Add(this.label12);
             this.groupBox3.Controls.Add(this.label11);
@@ -665,6 +676,24 @@
             this.groupBox3.TabIndex = 35;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "groupBox";
+            // 
+            // label_Humi
+            // 
+            this.label_Humi.AutoSize = true;
+            this.label_Humi.Location = new System.Drawing.Point(399, 55);
+            this.label_Humi.Name = "label_Humi";
+            this.label_Humi.Size = new System.Drawing.Size(30, 12);
+            this.label_Humi.TabIndex = 40;
+            this.label_Humi.Text = "%RH";
+            // 
+            // label_Temp
+            // 
+            this.label_Temp.AutoSize = true;
+            this.label_Temp.Location = new System.Drawing.Point(401, 24);
+            this.label_Temp.Name = "label_Temp";
+            this.label_Temp.Size = new System.Drawing.Size(17, 12);
+            this.label_Temp.TabIndex = 39;
+            this.label_Temp.Text = "℃";
             // 
             // label13
             // 
@@ -724,9 +753,9 @@
             this.panel6.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel6.Controls.Add(this.textBox_device);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel6.Location = new System.Drawing.Point(197, 0);
+            this.panel6.Location = new System.Drawing.Point(203, 0);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(348, 156);
+            this.panel6.Size = new System.Drawing.Size(342, 156);
             this.panel6.TabIndex = 38;
             // 
             // panel5
@@ -736,7 +765,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel5.Location = new System.Drawing.Point(0, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(197, 156);
+            this.panel5.Size = new System.Drawing.Size(203, 156);
             this.panel5.TabIndex = 37;
             // 
             // panel4
@@ -879,6 +908,8 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+        private System.Windows.Forms.Label label_Temp;
+        private System.Windows.Forms.Label label_Humi;
     }
 }
 
