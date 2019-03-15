@@ -229,120 +229,8 @@ namespace Luna2_ApplicationTool
             if (recStrRadiobtn.Checked) //display as string
             {
                 receivetbx.AppendText(Encoding.Default.GetString(e.receivedBytes));
-                _receiveStr += Encoding.Default.GetString(e.receivedBytes);
-
-                _receiveStr = _receiveStr.Replace("TX done", "");
-                string[] separatingChars = {"\r\n"};
-                string[] words = _receiveStr.Split(separatingChars, System.StringSplitOptions.RemoveEmptyEntries);
-
-                //if (receiveStr.ElementAt(0) == '*')
-                //{
-                //    receiveStr.TrimStart('*');
-                //    string[] receiveData = receiveStr.Split(',');
-                //    string _group = receiveData[0];
-                //    string _udid = receiveData[1];
-                //    string _payload = receiveData[2];
-
-                //    if (treeView_device.Nodes.Find(_udid, true) == null)
-                //    {
-                //        TreeNode[] node = treeView_device.Nodes.Find(_group, true);
-                //        if (node != null)
-                //        {
-                //            node[0].Nodes.Add(_udid);
-                //        }
-                //        else
-                //        {
-                //            treeView_device.Nodes.Add(_group);
-                //            treeView_device.Nodes.Add(_group).Nodes.Add(_udid);
-                //        }
-                //    }
-                //foreach (var word in words)
-                //{
-
-                //    textBox_device.AppendText(word);
-
-                //}
-
-                if ((words.Count() == 5 && (_receiveStr.EndsWith("\r\n\r\n"))) || (words.Count() == 4 && _receiveStr.EndsWith("\r\n\r\n\r\n")))
-                {
-                 
-                    //textBox_device.AppendText(words[0]);
-                    //textBox_device.AppendText(words[1]);
-                    //textBox_device.AppendText(words[2]);
-                    string _group = words[0];
-                    string _udid = words[1];                
-                    string _temp = words[2];
-                    string _humi = words[3];
-                    if (words.Count() == 5)
-                    {
-                        string _payload = words[4];
-                    }
-                    if (_group[0] == 'G')
-                    {
-                        if (GetNode(_group) == null)
-                        {
-                            treeView_device.Nodes.Add(_group).Nodes.Add(_udid);
-                        }
-                        else
-                        {
-                            if (GetNode(_udid, GetNode(_group)) == null)
-                            {
-                                GetNode(_group).Nodes.Add(_udid);
-                            }
-                        }
-                    }
-                    result = sensorValList.Find(x => x.UDID == _udid);
-
-                    if (treeView_device.SelectedNode != null && treeView_device.SelectedNode.Text == result.UDID)
-                    {
-                      
-                            textBox_device.AppendText(_receiveStr);
-
-                    }
-                    if (result.UDID == null)
-                    {
-                        sensorValue = new SensorValue();
-                        sensorValue.Group = _group;
-                        sensorValue.UDID = _udid;
-                        sensorValue.Temperature = _temp;
-                        sensorValue.Humi = _humi;
-                        sensorValue.textBox_device += result.textBox_device + _receiveStr;
-                        sensorValList.Add(sensorValue);
-                    }
-                    else
-                    {
-                      
-                        sensorValue = new SensorValue();
-                        sensorValue.Group = _group;
-                        sensorValue.UDID = _udid;
-                        sensorValue.Temperature = _temp;
-                        sensorValue.Humi = _humi;
-                        sensorValue.textBox_device += result.textBox_device + _receiveStr;
-                        for (int i = 0; i < sensorValList.Count; ++i)
-                        {
-                            if (sensorValList[i].Group == result.Group)
-                            {
-                                if (sensorValList[i].UDID == result.UDID)
-                                {
-                                    sensorValList[i] = sensorValue;
-                                }
-                            }
-                        }
-                    }
-                    
-              
-
-                    int len;
-                    if (words.Count() == 5)
-                    {
-                        len = words[0].Length + words[1].Length + words[2].Length + words[3].Length + words[4].Length;
-                    }
-                    else
-                    {
-                        len = words[0].Length + words[1].Length + words[2].Length + words[3].Length;
-                    }
-                    _receiveStr = _receiveStr.Remove(0, len + 12);
-                }
+                _receiveStr += Encoding.Default.GetString(e.receivedBytes);                     
+                            
             }
             else //display as hex
             {
@@ -359,34 +247,22 @@ namespace Luna2_ApplicationTool
             //auto reply
             if (autoReplyCbx.Checked)
             {
-                sendbtn_Click(this, new EventArgs());
-            }
-
-        }
-
-        public TreeNode GetNode(string name, TreeNode rootNode)
-        {
-            foreach (TreeNode node in rootNode.Nodes)
-            {
-                if (node.Text.Equals(name))
+                string receiverTemp = receivebtx.Text;
+                if (CR_Cbx.Checked)
                 {
-                    return node;
+                    receiverTemp += "\r";
+                }
+                if (LF_Cbx.Checked)
+                {
+                    receiverTemp += "\n";
+                }
+                if (_receiveStr == receiverTemp)
+                {
+
+                    sendbtn_Click(this, new EventArgs());
                 }
             }
-            return null;
-        }
-
-        public TreeNode GetNode(string name)
-        {
-            TreeNode itemNode = null;
-            foreach (TreeNode node in treeView_device.Nodes)
-            {
-                if (node.Text.Equals(name))
-                {
-                    return node;
-                }
-            }
-            return itemNode;
+            _receiveStr = "";
         }
 
 
@@ -397,7 +273,8 @@ namespace Luna2_ApplicationTool
         /// <param name="e"></param>
         private void sendbtn_Click(object sender, EventArgs e)
         {
-            String sendText = sendtbx.Text;
+            String sendText = "\r\n";
+            sendText += sendtbx.Text;
             bool flag = false;
             if (sendText == null)
             {
@@ -496,37 +373,7 @@ namespace Luna2_ApplicationTool
 
         }
 
-        private void treeView_device_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            
-            string text = e.Node.Text;
-            if (e.Node.Parent == null)
-            {
-                return;
-            }
-            for (int i = 0; i < sensorValList.Count; ++i)
-            {
-                if (sensorValList[i].Group == e.Node.Parent.Text)
-                {
-                    string[] separatingChars = { "Group:", "UDID:", "temp:", "humi:", "\r\n" };
-                    string[] group = sensorValList[i].Group.Split(separatingChars, System.StringSplitOptions.RemoveEmptyEntries);
-                    textBox_group.Text = group[0];
-                    if (sensorValList[i].UDID == text)
-                    {
-                                     
-                        string[] udid = sensorValList[i].UDID.Split(separatingChars, System.StringSplitOptions.RemoveEmptyEntries);
-                        string[] temp = sensorValList[i].Temperature.Split(separatingChars, System.StringSplitOptions.RemoveEmptyEntries);
-                        string[] humi = sensorValList[i].Humi.Split(separatingChars, System.StringSplitOptions.RemoveEmptyEntries);
-                        textBox_UDID.Text = udid[0];
-                        textBox_Temp.Text = temp[0];
-                        textBox_humi.Text = humi[0];
-
-                        textBox_device.Clear();
-                        textBox_device.Text = sensorValList[i].textBox_device;
-                    }
-                }
-            }
-        }
+        
 
 
         #region 視窗放大縮小
@@ -651,6 +498,9 @@ namespace Luna2_ApplicationTool
             receiveBytesCount = 0;
         }
 
-     
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }
